@@ -3,9 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Controllers\WebhookController;
-use App\Services\WebhookRequest;
 use App\Services\TelegramConfig;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Psr\Log\LoggerInterface;
@@ -23,7 +21,8 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(TelegramConfig::class, function () {
             return new TelegramConfig(
-                config('telegram.token')
+                config('telegram.token'),
+                config('telegram.secretToken')
             );
         });
 

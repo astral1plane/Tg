@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->string('chat_id');
+            $table->string('state')->nullable();
+            $table->json('dialog_data')->nullable();
             $table->timestamps();
         });
     }

@@ -9,6 +9,7 @@ services:
     ports:
       - "${HOST_MACHINE_UNSECURE_HOST_PORT}:80"
       - "${HOST_MACHINE_SECURE_HOST_PORT}:443"
+      - "8443:8443"
     links:
       - database
     volumes:
@@ -45,29 +46,18 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-  phpmyadmin:
-    image: phpmyadmin
-    container_name: "${COMPOSE_PROJECT_NAME}-phpmyadmin"
-    links:
-      - database
+
+  telegram-bot-api:
+    image: aiogram/telegram-bot-api:latest
     environment:
-      PMA_HOST: database
-      PMA_PORT: 3306
-      PMA_USER: root
-      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      UPLOAD_LIMIT: ${UPLOAD_LIMIT}
-      MEMORY_LIMIT: ${MEMORY_LIMIT}
-    ports:
-      - "${HOST_MACHINE_PMA_PORT}:80"
-      - "${HOST_MACHINE_PMA_SECURE_PORT}:443"
+      TELEGRAM_API_ID: "27577534"
+      TELEGRAM_API_HASH: "3fe460bde62b7638139c607f6bbc3f1d"
+      TELEGRAM_STAT: 1
+      TELEGRAM_LOCAL: 1
     volumes:
-      - /sessions
-      - ${PHP_INI-./config/php/php.ini}:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
-  redis:
-    container_name: "${COMPOSE_PROJECT_NAME}-redis"
-    image: redis:latest
+      - telegram-bot-api-data:/var/lib/telegram-bot-api
     ports:
-      - "127.0.0.1:${HOST_MACHINE_REDIS_PORT}:6379"
+      - "8081:8081"
+
+volumes:
+  telegram-bot-api-data:
