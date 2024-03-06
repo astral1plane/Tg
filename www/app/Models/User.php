@@ -12,7 +12,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $guarded = ['id'];
+    protected $guarded = false;
 
     protected $casts = [
         'dialog_data' => 'array',

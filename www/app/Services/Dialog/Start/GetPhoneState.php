@@ -8,23 +8,18 @@ use App\Services\TelegramClient;
 
 class GetPhoneState extends DialogState
 {
-    public function __construct(
-        private readonly TelegramClient $telegramClient
-    )
-    {
-    }
 
     public function handle(DialogContext $dialogContext): void
     {
-        $this->telegramClient->sendMessage($dialogContext->telegramRequest->getChatId(), 'Телефон');
+        $this->telegramClient->sendMessage($dialogContext->getChatId(), 'Телефон');
     }
 
     public function listen(DialogContext $dialogContext): void
     {
-        $dialogContext->telegramRequest->user->update([
-            'dialog_data' => array_merge($dialogContext->telegramRequest->user->dialog_data, [
-                'phone' => $dialogContext->telegramRequest->getMessage()
-            ])
-        ]);
+        $data =  [ 'dialog_data' => array_merge($dialogContext->getUser()->dialog_data, [
+            'car_number' => $dialogContext->getMessage()
+        ])];
+
+        $this->telegramClient->sendMessage($dialogContext->getChatId(), 'listen_GetPhoneState');
     }
 }

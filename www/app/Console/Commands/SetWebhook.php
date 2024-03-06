@@ -6,6 +6,8 @@ use App\Services\TelegramConfig;
 use GuzzleHttp\Psr7\HttpFactory;
 use Illuminate\Console\Command;
 use Illuminate\Http\Client\Factory;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class SetWebhook extends Command
 {
@@ -30,9 +32,9 @@ class SetWebhook extends Command
 
     public function handle(Factory $httpFactory, TelegramConfig $telegramConfig): void
     {
-        $response = $httpFactory->post($telegramConfig->baseUrl(). 'setWebhook' , [
+        $response = $httpFactory->post($telegramConfig->baseUrl(). 'setWebhook', [
             'url' => route('webhook'),
-            'secret_token' => $telegramConfig->secretToken
+            'secret_token' => $telegramConfig->secretToken()
         ]);
 
         $this->info($response->json()['description']);

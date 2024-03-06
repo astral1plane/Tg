@@ -24,4 +24,21 @@ class TelegramClient
         $response = $this->httpFactory->post($this->telegramConfig->baseUrl() . 'sendMessage', $data);
         return collect($response->json());
     }
+
+    public function getFile($fileId)
+    {
+        $data = [
+            'file_id' => $fileId
+        ];
+        $response = $this->httpFactory->post($this->telegramConfig->baseUrl() . 'getFile', $data);
+        return collect($response->json());
+    }
+
+
+    public function downloadLinkFiles($filePath)
+    {
+
+        $response = $this->httpFactory->get($this->telegramConfig->fileUrl() . $filePath);
+        return collect($response->json());
+    }
 }
